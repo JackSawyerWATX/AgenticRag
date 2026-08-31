@@ -18,6 +18,10 @@ load_dotenv()
 # initiate supabase db
 supabase_url = os.environ.get("SUPABASE_URL")
 supabase_key = os.environ.get("SUPABASE_SERVICE_KEY")
+
+if not supabase_url or not supabase_key:
+    raise ValueError("SUPABASE_URL and SUPABASE_SERVICE_KEY must be set.")
+
 supabase: Client = create_client(supabase_url, supabase_key)
 
 # initiate embeddings model

@@ -12,7 +12,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 from langchain_classic.agents import create_tool_calling_agent
-from langchain import hub
+from langchain_classic import hub
 from langchain_core.prompts import PromptTemplate
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain_openai import OpenAIEmbeddings
@@ -27,6 +27,10 @@ load_dotenv()
 # initiating supabase
 supabase_url = os.environ.get("SUPABASE_URL")
 supabase_key = os.environ.get("SUPABASE_SERVICE_KEY")
+
+if not supabase_url or not supabase_key:
+    raise ValueError("SUPABASE_URL and SUPABASE_SERVICE_KEY must be set.")
+
 supabase: Client = create_client(supabase_url, supabase_key)
 
 # initiating embeddings model

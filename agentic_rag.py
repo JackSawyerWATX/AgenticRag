@@ -9,7 +9,7 @@ from langchain_classic.agents import create_tool_calling_agent
 from langchain_core.prompts import PromptTemplate
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain_openai import OpenAIEmbeddings
-from langchain import hub
+from langchain_classic import hub
 
 from supabase.client import Client, create_client
 from langchain_core.tools import tool
@@ -20,6 +20,9 @@ load_dotenv()
 # initiate supabase database
 supabase_url = os.environ.get("SUPABASE_URL")
 supabase_key = os.environ.get("SUPABASE_SERVICE_KEY")
+
+if not supabase_url or not supabase_key:
+    raise ValueError("SUPABASE_URL and SUPABASE_SERVICE_KEY must be set.")
 
 supabase: Client = create_client(supabase_url, supabase_key)
 
