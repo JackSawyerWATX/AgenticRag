@@ -9,7 +9,6 @@ from langchain_classic.agents import create_tool_calling_agent
 from langchain_core.prompts import PromptTemplate
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain_openai import OpenAIEmbeddings
-from langchain_classic import hub
 
 from supabase.client import Client, create_client
 from langchain_core.tools import tool
@@ -40,8 +39,18 @@ vector_store = SupabaseVectorStore(
 # initiate large language model (temperature = 0)
 llm = ChatOpenAI(temperature=0)
 
-# fetch the prompt from the prompt hub
-prompt = hub.pull("hwchase17/openai-functions-agent")
+# define the agent prompt locally
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            "You answer questions using the available document retrieval tool. "
+            "Use retrieved context when it is relevant, and say when the documents do not contain the answer.",
+        ),
+        ("human", "{input}"),
+        MessagesPlaceholder(variable_name="agent_scratchpad"),
+    ]
+)
 
 # create the tools
 @tool(response_format="content_and_artifact")
